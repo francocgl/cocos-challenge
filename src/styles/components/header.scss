@@ -1,0 +1,14 @@
+.cocos-header {
+  padding: 24px;
+  margin: 0 20px;
+  border-bottom: 1px solid #efefef;
+}
+
+@media (max-width: 487px) {
+  .cocos-header {
+    h1 {
+      text-align: center;
+      font-size: 1.3em;
+    }
+  }
+}

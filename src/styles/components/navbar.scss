@@ -1,0 +1,65 @@
+.cocos__navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 36px;
+}
+
+.cocos__navbar-buttons {
+  display: flex;
+  padding: 0;
+  margin: 0;
+
+  .cocos__navbar-buttons__list-item {
+    margin-right: 16px;
+  }
+}
+
+.cocos__navbar-buttons__list-item__button {
+  transition: all 0.6s ease-in-out;
+}
+
+.cocos__navbar-buttons__list-item__button:hover {
+  background-color: $gray;
+  color: $white;
+}
+
+.cocos__navbar-buttons__list-item__active-button {
+  background: $black;
+  color: $white;
+}
+
+.cocos__search-input {
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid $light-gray;
+}
+
+@media (max-width: 769px) {
+  /* … */
+}
+
+@media (max-width: 487px) {
+  .cocos__navbar-buttons,
+  .cocos__navbar {
+    flex-direction: column;
+  }
+
+  .cocos__navbar-buttons,
+  .cocos__search-input {
+    width: 100%;
+  }
+
+  .cocos__navbar-buttons {
+    .cocos__navbar-buttons__list-item {
+      margin-right: 0;
+    }
+
+    .cocos__navbar-buttons__list-item__button {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+  }
+}
