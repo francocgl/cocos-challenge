@@ -30,7 +30,7 @@
   .cocos__modal-header__button {
     padding: 0;
     background-color: transparent;
-    color: red;
+    color: $danger;
   }
 }
 
@@ -62,7 +62,7 @@
 }
 
 .cocos__modal-form-control__input-error {
-  color: red;
+  color: $danger;
   display: block;
   margin-top: 8px;
 }
@@ -81,25 +81,28 @@
 }
 
 .cocos__order-modal-box.cocos__order-modal-box__value-filled {
-  color: green;
+  color: $success;
   font-weight: 600;
 }
 
 .cocos__order-modal-box.cocos__order-modal-box__value-rejected {
-  color: red;
+  color: $danger;
   font-weight: 600;
 }
 
 .cocos__order-modal-box.cocos__order-modal-box__value-pending {
-  color: yellow;
+  color: $warning;
   font-weight: 600;
 }
 
 @media (max-width: 487px) {
+  .cocos__modal-header {
+    margin-top: 24px;
+  }
+
   .cocos__modal-content {
     width: 100%;
     height: 100%;
     border-radius: 0;
-    padding: 16px;
   }
 }

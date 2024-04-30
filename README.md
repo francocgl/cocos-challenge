@@ -40,3 +40,12 @@ Empezar el server:
 npm start
 
 ```
+
+### Test
+
+Correr tests:
+
+```bash
+npm test
+
+```

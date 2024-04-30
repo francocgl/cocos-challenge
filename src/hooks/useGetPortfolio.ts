@@ -11,7 +11,7 @@ const useGetPortfolio = () => {
       return response.data;
     },
     onError: error => {
-      return `There is an error ${error}`;
+      return `Error: Hay un error ${error}`;
     },
   });
 };

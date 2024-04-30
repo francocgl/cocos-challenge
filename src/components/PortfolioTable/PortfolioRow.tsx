@@ -19,13 +19,15 @@ const PortfolioRow = ({
   const { avg_cost_price, ticker, quantity, last_price } = position;
   const id = number + 1;
   const differencePrice = last_price - avg_cost_price;
-  console.log('position', position);
-  const marketValue = useMemo(() => {
-    return (quantity * last_price).toFixed(2);
-  }, [quantity, last_price]);
 
+  const marketValue = useMemo(() => {
+    return (quantity * last_price).toLocaleString('es-ar');
+  }, [quantity, last_price]);
   const profit = useMemo(() => {
-    return (differencePrice * quantity).toFixed(2);
+    if (differencePrice * quantity > 0) {
+      return `+${(differencePrice * quantity).toLocaleString('es-ar')}`;
+    }
+    return (differencePrice * quantity).toLocaleString('es-ar');
   }, [differencePrice, quantity]);
 
   const totalReturn = useMemo(() => {
@@ -33,7 +35,7 @@ const PortfolioRow = ({
   }, [avg_cost_price, differencePrice]);
 
   const formattedMarketValue = `ARS ${marketValue}`;
-  const formattedProfit = formatNumberRow(+profit);
+  const formattedProfit = `ARS ${profit}`;
   const formattedTotalReturn = `${formatNumberRow(+totalReturn)}%`;
 
   const handleRowClick = (ticker: string, action: SideType) => {
@@ -41,13 +43,15 @@ const PortfolioRow = ({
     dispatch(openModal(action));
   };
 
+  const profitClassName = differencePrice * quantity;
+
   return (
     <tr className="cocos__table__row">
-      <td className="cocos__table__ticker">{id}</td>
+      <td className="cocos__table__number">{id}</td>
       <td className="cocos__table__ticker">{ticker}</td>
       <td className="cocos__table__name">{quantity}</td>
       <td className="cocos__table__price">{formattedMarketValue}</td>
-      <td className={isPositiveNumber(+profit)}>{formattedProfit}</td>
+      <td className={isPositiveNumber(profitClassName)}>{formattedProfit}</td>
       <td className={isPositiveNumber(+totalReturn)}>{formattedTotalReturn}</td>
       <td>
         <button

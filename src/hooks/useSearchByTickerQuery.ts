@@ -12,6 +12,9 @@ const useSearchByTickerQuery = (searchQuery: string) => {
       );
       return response.data[0];
     },
+    onError: error => {
+      return `Error: Hay un error ${error}`;
+    },
   });
 };
 

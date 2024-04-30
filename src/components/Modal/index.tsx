@@ -5,6 +5,7 @@ import useSearchByTickerQuery from '../../hooks/useSearchByTickerQuery';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import { RootState } from '../../redux/store';
 import ModalForm from './ModalForm';
+import { MessageWrapper } from '../common';
 
 const Modal = (): ReactElement => {
   useLockBodyScroll();
@@ -26,10 +27,10 @@ const Modal = (): ReactElement => {
               Cerrrar
             </button>
           </div>
-          <ModalForm instrument={instrument} side={side} />
+          <ModalForm id={instrument.id} side={side} />
         </div>
       ) : (
-        'Cargando..'
+        <MessageWrapper text="Cargando..." />
       )}
     </div>
   );

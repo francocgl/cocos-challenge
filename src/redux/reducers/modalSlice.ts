@@ -1,22 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { SIDE } from '../../const/config';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { SIDE, SideType } from '../../const/config';
+
+interface ModalState {
+  isModalOpen: boolean;
+  ticker: string;
+  side: SideType;
+}
+
+const initialState: ModalState = {
+  isModalOpen: false,
+  ticker: '',
+  side: SIDE.BUY,
+};
 
 export const modalSlice = createSlice({
   name: 'modal',
-  initialState: {
-    isModalOpen: false,
-    ticker: '',
-    side: SIDE.BUY,
-  },
+  initialState,
   reducers: {
     closeModal: state => {
       state.isModalOpen = false;
     },
-    openModal: (state, action) => {
+    openModal: (state, action: PayloadAction<SideType>) => {
       state.isModalOpen = true;
       state.side = action.payload;
     },
-    setTicker: (state, action) => {
+    setTicker: (state, action: PayloadAction<string>) => {
       state.ticker = action.payload;
     },
   },

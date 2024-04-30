@@ -11,11 +11,10 @@ const OrderSuccessModal = ({
 }): ReactElement => {
   const dispatch = useDispatch();
   const { id, side, type, status, price, quantity } = order;
-  console.log(order);
   const formatOrder = `Orden Nro ${id}`;
-  const formatPrice = `ARS ${price}`;
+  const formatPrice = `ARS ${price?.toLocaleString('es-ar')}`;
 
-  const formatStatus = (status: Status) => {
+  const formatStatus = (status: Status): string => {
     if (status === 'FILLED') return 'cocos__order-modal-box__value-filled';
     if (status === 'REJECTED') return 'cocos__order-modal-box__value-rejected';
     return 'cocos__order-modal-box__value-pending';

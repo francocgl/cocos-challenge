@@ -23,19 +23,19 @@ const InstrumentsRow = ({
   }, [last_price, close_price]);
 
   const formattedReturnValue = `${returnValue}%`;
+  const formattedLastPrice = `ARS ${last_price.toLocaleString('es-ar')}`;
 
   const handleRowClick = (ticker: string) => {
     dispatch(setTicker(ticker));
     dispatch(openModal(SIDE.BUY));
   };
-  console.log('intrument', instrument);
 
   return (
     <tr className="cocos__table__row">
-      <td className="cocos__table__ticker">{id}</td>
+      <td className="cocos__table__number">{id}</td>
       <td className="cocos__table__ticker">{ticker}</td>
       <td className="cocos__table__name">{name}</td>
-      <td className="cocos__table__price">{`ARS ${last_price}`}</td>
+      <td className="cocos__table__price">{formattedLastPrice}</td>
       <td className={isPositiveNumber(+returnValue)}>{formattedReturnValue}</td>
       <td>
         <button

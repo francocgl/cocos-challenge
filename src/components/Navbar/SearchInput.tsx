@@ -14,8 +14,7 @@ const SearchInput = (): ReactElement => {
     }
 
     debounceRef.current = setTimeout(() => {
-      console.log('fetching');
-      dispatch(setFilterTickers(value.toUpperCase()));
+      dispatch(setFilterTickers(value.trim().toUpperCase()));
     }, 500) as unknown as number;
   };
 
@@ -23,6 +22,7 @@ const SearchInput = (): ReactElement => {
     <input
       className="cocos__search-input"
       placeholder="Buscar tickers"
+      autoComplete="off"
       type="text"
       name="search"
       onChange={handleSearchChange}

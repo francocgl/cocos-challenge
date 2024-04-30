@@ -20,8 +20,10 @@ jest.mock('../../hooks/useOrderMutationQuery', () => ({
 }));
 
 describe('<ModalForm />', () => {
+  const id = mockInstrumentResponse[0].id;
+
   it('se envia correctamente el form y se hace la post call', async () => {
-    render(<ModalForm instrument={mockInstrumentResponse[0]} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" />);
 
     fireEvent.change(screen.getByLabelText('Cantidad de acciones'), {
       target: { value: '10' },
@@ -31,7 +33,7 @@ describe('<ModalForm />', () => {
 
     waitFor(() => {
       expect(useOrderMutationQuery).toHaveBeenCalledWith({
-        instrument_id: mockInstrumentResponse[0].id,
+        instrument_id: id,
         side: 'BUY',
         type: 'MARKET',
         quantity: 10,
@@ -40,7 +42,7 @@ describe('<ModalForm />', () => {
   });
 
   it('el boton de enviar se disablea y pone en carga', async () => {
-    render(<ModalForm instrument={mockInstrumentResponse[0]} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" />);
 
     fireEvent.change(screen.getByLabelText('Cantidad de acciones'), {
       target: { value: '10' },
@@ -52,7 +54,7 @@ describe('<ModalForm />', () => {
   });
 
   it('valido si no pongo la cantidad de acciones a comprar en una orden market', async () => {
-    render(<ModalForm instrument={mockInstrumentResponse[0]} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" />);
 
     fireEvent.change(screen.getByLabelText('Cantidad de acciones'), {
       target: { value: '0' },
@@ -66,7 +68,7 @@ describe('<ModalForm />', () => {
   });
 
   it('valido si no pongo el precio a comprar en una orden limit', async () => {
-    render(<ModalForm instrument={mockInstrumentResponse[0]} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" />);
 
     fireEvent.change(screen.getByLabelText('Tipo de Orden'), {
       target: { value: 'LIMIT' },
@@ -84,7 +86,7 @@ describe('<ModalForm />', () => {
   });
 
   it('valido si pongo fracciones de accion en la cantidad a comprar', async () => {
-    render(<ModalForm instrument={mockInstrumentResponse[0]} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" />);
 
     fireEvent.change(screen.getByLabelText('Cantidad de acciones'), {
       target: { value: '1.5' },

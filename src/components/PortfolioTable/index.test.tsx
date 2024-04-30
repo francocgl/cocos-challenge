@@ -75,7 +75,7 @@ describe('<PortfolioTable />', () => {
     render(<PortfolioTable />, { wrapper });
 
     expect(
-      screen.getByText('No existen acciones para la busqueda foo.'),
+      screen.getByText('No existen acciones para la busqueda foo'),
     ).toBeInTheDocument();
   });
 

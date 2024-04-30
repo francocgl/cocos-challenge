@@ -1,14 +1,10 @@
 import React, { type ReactElement, useState } from 'react';
 import { ORDER, SIDE, SideType } from '../../const/config';
-import useOrderMutationQuery from '../../hooks/useOrderMutationQuery';
-import {
-  GetInstrumentsResponse,
-  GetPortfolioResponse,
-} from '../../types/queryResponse';
-import OrderSuccessModal from './OrderSuccessModal';
-import useGetPortfolio from '../../hooks/useGetPortfolio';
-import { setOrderDataObject, validateForm } from './helpers';
+import { useGetPortfolio, useOrderMutationQuery } from '../../hooks';
+import { GetPortfolioResponse } from '../../types/queryResponse';
 import { MessageWrapper } from '../common';
+import { setOrderDataObject, validateForm } from './helpers';
+import OrderSuccessModal from './OrderSuccessModal';
 
 type FormErrors = {
   priceError: string;
@@ -16,15 +12,14 @@ type FormErrors = {
 };
 
 const ModalForm = ({
-  instrument,
+  id,
   side,
 }: {
-  instrument: GetInstrumentsResponse;
+  id: number;
   side: SideType;
 }): ReactElement => {
   const { data: portfolio, isSuccess } = useGetPortfolio();
   const sendOrderMutation = useOrderMutationQuery();
-  const { id } = instrument;
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(false);
   const [order, setOrder] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -72,9 +67,7 @@ const ModalForm = ({
     } else {
       const dataObject = setOrderDataObject(formData);
       try {
-        console.log('dataObject', dataObject);
         const res = await sendOrderMutation.mutateAsync(dataObject);
-        console.log('response', res);
         setOrder(res);
         setIsSubmitDisabled(false);
       } catch (err) {
@@ -123,7 +116,6 @@ const ModalForm = ({
           <option value={ORDER.LIMIT}>Limit</option>
         </select>
       </div>
-
       <div className="cocos__modal-form-control">
         <label htmlFor="quantity" className="cocos__modal-form-control__label">
           Cantidad de acciones

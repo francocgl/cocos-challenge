@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import React, { useMemo, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import useGetInstruments from '../../hooks/useGetInstruments';
 import { GetInstrumentsResponse } from '../../types/queryResponse';
@@ -16,11 +16,13 @@ const InstrumentsTable = (): ReactElement => {
   const filterTickers = useSelector(
     (state: RootState) => state.filter.filterTickers,
   );
-  const filterInstruments = isSuccess
-    ? instruments.filter((item: GetInstrumentsResponse) =>
-        item.ticker.includes(filterTickers),
-      )
-    : instruments;
+
+  const filteredInstruments = useMemo(() => {
+    if (!isSuccess || !instruments) return instruments;
+    return instruments.filter((item: GetInstrumentsResponse) =>
+      item.ticker.includes(filterTickers),
+    );
+  }, [isSuccess, instruments, filterTickers]);
 
   const instrumentsHeader = [
     '#',
@@ -35,26 +37,25 @@ const InstrumentsTable = (): ReactElement => {
   if (error) return <MessageWrapper text={`Error: ${error}`} />;
   if (!instruments)
     return <MessageWrapper text="No hay instrumentos disponibles." />;
-  if (!filterInstruments.length)
+  if (!filteredInstruments.length)
     return (
       <MessageWrapper
-        text={`No existen instrumentos para la busqueda ${filterTickers}.`}
+        text={`No existen instrumentos para la busqueda ${filterTickers}`}
       />
     );
 
   return (
     <Table tableHeader={instrumentsHeader}>
       <tbody>
-        {instruments &&
-          filterInstruments.map(
-            (instrument: GetInstrumentsResponse, index: number) => (
-              <InstrumentsRow
-                key={instrument.id}
-                instrument={instrument}
-                number={index}
-              />
-            ),
-          )}
+        {filteredInstruments.map(
+          (instrument: GetInstrumentsResponse, index: number) => (
+            <InstrumentsRow
+              key={instrument.id}
+              instrument={instrument}
+              number={index}
+            />
+          ),
+        )}
       </tbody>
     </Table>
   );

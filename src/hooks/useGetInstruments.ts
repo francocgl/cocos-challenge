@@ -10,6 +10,9 @@ const useGetInstruments = () => {
       const response = await axios.get(INSTRUMENTS_URL);
       return response.data;
     },
+    onError: error => {
+      return `Error: Hay un error ${error}`;
+    },
   });
 };
 

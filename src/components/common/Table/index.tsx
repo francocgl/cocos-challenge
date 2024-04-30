@@ -11,8 +11,13 @@ const Table = ({ tableHeader, children }: TableProps): ReactElement => {
       <table className="cocos__table">
         <thead>
           <tr>
-            {tableHeader.map(item => (
-              <th key={item}>{item}</th>
+            {tableHeader.map((item, index) => (
+              <th
+                key={item}
+                className={index === 0 ? 'cocos__table__number' : ''}
+              >
+                {item}
+              </th>
             ))}
           </tr>
         </thead>

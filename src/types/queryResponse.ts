@@ -27,11 +27,11 @@ export type GetPortfolioResponse = {
 };
 
 export type OrderMutationResponse = {
+  id: number;
   instrument_id: number;
   side: SideType;
   type: OrderType;
-  quantity: null;
-  price: number;
-  id: 362421;
+  quantity: number;
   status: Status;
+  price?: number;
 };

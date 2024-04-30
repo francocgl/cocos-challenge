@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import React, { useMemo, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import useGetPortfolio from '../../hooks/useGetPortfolio';
 import { GetPortfolioResponse } from '../../types/queryResponse';
@@ -11,11 +11,13 @@ const PortfolioTable = (): ReactElement => {
   const filterTickers = useSelector(
     (state: RootState) => state.filter.filterTickers,
   );
-  const filterInstruments = isSuccess
-    ? portfolio.filter((item: GetPortfolioResponse) =>
-        item.ticker.includes(filterTickers),
-      )
-    : portfolio;
+
+  const filteredInstruments = useMemo(() => {
+    if (!isSuccess || !portfolio) return portfolio;
+    return portfolio.filter((item: GetPortfolioResponse) =>
+      item.ticker.includes(filterTickers),
+    );
+  }, [isSuccess, portfolio, filterTickers]);
 
   const portfolioHeaders = [
     '#',
@@ -31,26 +33,25 @@ const PortfolioTable = (): ReactElement => {
   if (error) return <MessageWrapper text={`Error: ${error}`} />;
   if (!portfolio)
     return <MessageWrapper text="No tienes acciones en tu portfolio." />;
-  if (!filterInstruments.length)
+  if (!filteredInstruments.length)
     return (
       <MessageWrapper
-        text={`No existen acciones para la busqueda ${filterTickers}.`}
+        text={`No existen acciones para la busqueda ${filterTickers}`}
       />
     );
 
   return (
     <Table tableHeader={portfolioHeaders}>
       <tbody>
-        {portfolio &&
-          filterInstruments.map(
-            (position: GetPortfolioResponse, index: number) => (
-              <PortfolioRow
-                key={`${position.instrument_id}_${index}`}
-                number={index}
-                position={position}
-              />
-            ),
-          )}
+        {filteredInstruments.map(
+          (position: GetPortfolioResponse, index: number) => (
+            <PortfolioRow
+              key={`${position.instrument_id}_${index}`}
+              number={index}
+              position={position}
+            />
+          ),
+        )}
       </tbody>
     </Table>
   );

@@ -1,11 +1,15 @@
+.cocos {
+  min-height: 100vh;
+}
+
 .cocos__main {
   padding: 36px;
 }
 
 .cocos__positive-number {
-  color: green;
+  color: $success;
 }
 
 .cocos__negative-number {
-  color: red;
+  color: $danger;
 }

@@ -17,7 +17,7 @@ describe('<PortfolioRow />', () => {
     render(<PortfolioRow number={0} position={mockPosition} />, { wrapper });
 
     expect(screen.getByText('MIRG')).toBeInTheDocument();
-    expect(screen.getByText('ARS 81.76')).toBeInTheDocument();
+    expect(screen.getByText('ARS 81,76')).toBeInTheDocument();
     expect(screen.getByText('-44.88%')).toBeInTheDocument();
   });
 

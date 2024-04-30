@@ -34,12 +34,12 @@ export const setOrderDataObject = (
 ): OrderDataTypes => {
   const { type, quantity, price, ...rest } = formData;
 
-  if (type === ORDER.LIMIT) {
+  if (type === ORDER.LIMIT && price) {
     return {
       ...rest,
       type,
       quantity: +quantity,
-      price: price,
+      price: +price,
     };
   }
 
