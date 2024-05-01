@@ -23,7 +23,7 @@ describe('<ModalForm />', () => {
   const id = mockInstrumentResponse[0].id;
 
   it('se envia correctamente el form y se hace la post call', async () => {
-    render(<ModalForm id={id} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" closePrice={20} />);
 
     fireEvent.change(screen.getByLabelText('Cantidad de acciones'), {
       target: { value: '10' },
@@ -42,7 +42,7 @@ describe('<ModalForm />', () => {
   });
 
   it('el boton de enviar se disablea y pone en carga', async () => {
-    render(<ModalForm id={id} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" closePrice={20} />);
 
     fireEvent.change(screen.getByLabelText('Cantidad de acciones'), {
       target: { value: '10' },
@@ -54,7 +54,7 @@ describe('<ModalForm />', () => {
   });
 
   it('valido si no pongo la cantidad de acciones a comprar en una orden market', async () => {
-    render(<ModalForm id={id} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" closePrice={20} />);
 
     fireEvent.change(screen.getByLabelText('Cantidad de acciones'), {
       target: { value: '0' },
@@ -68,7 +68,7 @@ describe('<ModalForm />', () => {
   });
 
   it('valido si no pongo el precio a comprar en una orden limit', async () => {
-    render(<ModalForm id={id} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" closePrice={20} />);
 
     fireEvent.change(screen.getByLabelText('Tipo de Orden'), {
       target: { value: 'LIMIT' },
@@ -86,7 +86,7 @@ describe('<ModalForm />', () => {
   });
 
   it('valido si pongo fracciones de accion en la cantidad a comprar', async () => {
-    render(<ModalForm id={id} side="BUY" />);
+    render(<ModalForm id={id} side="BUY" closePrice={20} />);
 
     fireEvent.change(screen.getByLabelText('Cantidad de acciones'), {
       target: { value: '1.5' },
@@ -96,6 +96,25 @@ describe('<ModalForm />', () => {
 
     expect(
       screen.getByText('Las acciones no pueden ser fraccionadas.'),
+    ).toBeInTheDocument();
+  });
+
+  it('valido si quiero comprar menos del precio de la accion', async () => {
+    const closePrice = 20;
+    render(<ModalForm id={id} side="BUY" closePrice={closePrice} />);
+
+    fireEvent.change(screen.getByLabelText('Tipo de Orden'), {
+      target: { value: 'LIMIT' },
+    });
+
+    fireEvent.change(screen.getByLabelText('Precio'), {
+      target: { value: '11' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(
+      screen.getByText(`Debes comprar/vender como mínimo ARS ${closePrice}.`),
     ).toBeInTheDocument();
   });
 });

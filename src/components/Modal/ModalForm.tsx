@@ -1,4 +1,4 @@
-import React, { type ReactElement, useState } from 'react';
+import React, { type ReactElement, useState, useEffect } from 'react';
 import { ORDER, SIDE, SideType } from '../../const/config';
 import { useGetPortfolio, useOrderMutationQuery } from '../../hooks';
 import { GetPortfolioResponse } from '../../types/queryResponse';
@@ -11,13 +11,13 @@ type FormErrors = {
   quantityError: string;
 };
 
-const ModalForm = ({
-  id,
-  side,
-}: {
+interface ModalFormProps {
+  closePrice: number;
   id: number;
   side: SideType;
-}): ReactElement => {
+}
+
+const ModalForm = ({ closePrice, id, side }: ModalFormProps): ReactElement => {
   const { data: portfolio, isSuccess } = useGetPortfolio();
   const sendOrderMutation = useOrderMutationQuery();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(false);
@@ -57,7 +57,7 @@ const ModalForm = ({
     setIsError(false);
 
     // Validacion
-    const errors = validateForm(formData, hasPortfolioActions);
+    const errors = validateForm(formData, hasPortfolioActions, closePrice);
     setFormErrors(errors);
 
     // Si no hay errores hago la llamada a la API
@@ -65,9 +65,11 @@ const ModalForm = ({
       setIsSubmitDisabled(false);
       return;
     } else {
-      const dataObject = setOrderDataObject(formData);
+      const dataObject = setOrderDataObject(formData, closePrice);
+      console.log('dataObject', dataObject);
       try {
         const res = await sendOrderMutation.mutateAsync(dataObject);
+        console.log('response', res);
         setOrder(res);
         setIsSubmitDisabled(false);
       } catch (err) {
@@ -75,6 +77,20 @@ const ModalForm = ({
       }
     }
   };
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      quantity: 0,
+      price: 0,
+    });
+
+    setFormErrors({
+      priceError: '',
+      quantityError: '',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.type]);
 
   if (isError)
     return (
@@ -116,25 +132,8 @@ const ModalForm = ({
           <option value={ORDER.LIMIT}>Limit</option>
         </select>
       </div>
-      <div className="cocos__modal-form-control">
-        <label htmlFor="quantity" className="cocos__modal-form-control__label">
-          Cantidad de acciones
-        </label>
-        <input
-          type="number"
-          name="quantity"
-          className="cocos__modal-form-control__input"
-          id="quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-        />
-        {formErrors.quantityError && (
-          <span className="cocos__modal-form-control__input-error">
-            {formErrors.quantityError}
-          </span>
-        )}
-      </div>
-      {formData.type === ORDER.LIMIT && (
+
+      {formData.type === ORDER.LIMIT ? (
         <div className="cocos__modal-form-control">
           <label htmlFor="price" className="cocos__modal-form-control__label">
             Precio
@@ -150,6 +149,28 @@ const ModalForm = ({
           {formErrors.priceError && (
             <span className="cocos__modal-form-control__input-error">
               {formErrors.priceError}
+            </span>
+          )}
+        </div>
+      ) : (
+        <div className="cocos__modal-form-control">
+          <label
+            htmlFor="quantity"
+            className="cocos__modal-form-control__label"
+          >
+            Cantidad de acciones
+          </label>
+          <input
+            type="number"
+            name="quantity"
+            className="cocos__modal-form-control__input"
+            id="quantity"
+            value={formData.quantity}
+            onChange={handleChange}
+          />
+          {formErrors.quantityError && (
+            <span className="cocos__modal-form-control__input-error">
+              {formErrors.quantityError}
             </span>
           )}
         </div>

@@ -27,7 +27,11 @@ const Modal = (): ReactElement => {
               Cerrrar
             </button>
           </div>
-          <ModalForm id={instrument.id} side={side} />
+          <ModalForm
+            id={instrument.id}
+            side={side}
+            closePrice={instrument.close_price}
+          />
         </div>
       ) : (
         <MessageWrapper text="Cargando..." />
