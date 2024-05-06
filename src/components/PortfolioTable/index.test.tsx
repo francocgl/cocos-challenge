@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import useGetPortfolio from '../../hooks/useGetPortfolio';
 import { mockPortfolioResponse, wrapper } from '../../utils/testUtils';
 import PortfolioTable from '.';
@@ -95,5 +95,28 @@ describe('<PortfolioTable />', () => {
 
     expect(mockSearchResult).toBeInTheDocument();
     expect(screen.queryByText('MING')).not.toBeInTheDocument();
+  });
+
+  it('mostrar datos del portfolio row correctamente', () => {
+    render(<PortfolioTable />, { wrapper });
+
+    expect(screen.getByText('BBAR')).toBeInTheDocument();
+    expect(screen.getByText('ARS +285')).toBeInTheDocument();
+    expect(screen.getByText('+254.92%')).toBeInTheDocument();
+  });
+
+  it('al hacer click en Comprar abrir modal', async () => {
+    render(<PortfolioTable />, { wrapper });
+
+    const sellButton = screen.queryAllByText('Vender')[0];
+
+    fireEvent.click(sellButton);
+
+    waitFor(() => {
+      expect(screen.getByText('Tipo de Operacion')).toBeInTheDocument();
+      expect(
+        screen.getByRole('select', { name: 'Compra' }),
+      ).toBeInTheDocument();
+    });
   });
 });

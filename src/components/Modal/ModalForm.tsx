@@ -66,10 +66,8 @@ const ModalForm = ({ closePrice, id, side }: ModalFormProps): ReactElement => {
       return;
     } else {
       const dataObject = setOrderDataObject(formData, closePrice);
-      console.log('dataObject', dataObject);
       try {
         const res = await sendOrderMutation.mutateAsync(dataObject);
-        console.log('response', res);
         setOrder(res);
         setIsSubmitDisabled(false);
       } catch (err) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import useGetInstruments from '../../hooks/useGetInstruments';
 import { mockInstrumentResponse, wrapper } from '../../utils/testUtils';
 import InstrumentsTable from '.';
@@ -95,5 +95,32 @@ describe('<InstrumentsTable />', () => {
 
     expect(mockSearchResult).toBeInTheDocument();
     expect(screen.queryByText('MING')).not.toBeInTheDocument();
+  });
+
+  it('mostrar datos del instrument row correctamente', () => {
+    render(<InstrumentsTable />, {
+      wrapper,
+    });
+
+    expect(screen.getByText('MIRG')).toBeInTheDocument();
+    expect(screen.getByText('ARS 40,88')).toBeInTheDocument();
+    expect(screen.getByText('8.32%')).toBeInTheDocument();
+  });
+
+  it('al hacer click en Comprar abrir modal', async () => {
+    render(<InstrumentsTable />, {
+      wrapper,
+    });
+
+    const buyButton = screen.queryAllByText('Comprar')[0];
+
+    fireEvent.click(buyButton);
+
+    waitFor(() => {
+      expect(screen.getByText('Tipo de Operacion')).toBeInTheDocument();
+      expect(
+        screen.getByRole('select', { name: 'Compra' }),
+      ).toBeInTheDocument();
+    });
   });
 });
